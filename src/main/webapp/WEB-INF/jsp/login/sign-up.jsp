@@ -1,14 +1,14 @@
-<!doctype html>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" session="false" %>
 <html lang="ru">
  
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/vendor/bootstrap/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=cyrillic-ext" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <style>
     html,
     body {
@@ -27,7 +27,7 @@
     <title>WD: Регистрация</title>
 </head>
 <body>
-    <form class="splash-container" method="post" action="/register">
+    <form class="splash-container" method="post" action="${pageContext.request.contextPath}/register">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-1">Форма Регистрации</h3>
@@ -56,13 +56,13 @@
                 </div>
             </div>
             <div class="card-footer bg-white">
-                <p>Уже зарегистрированы? <a href="/login/" class="text-secondary">Войдите здесь.</a></p>
+                <p>Уже зарегистрированы? <a href="${pageContext.request.contextPath}/login" class="text-secondary">Войдите здесь.</a></p>
             </div>
         </div>
     </form>
 </body>
 
-<script src="/assets/js/validate.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/validate.js"></script>
 
  
 </html>

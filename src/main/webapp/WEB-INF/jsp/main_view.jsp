@@ -1,23 +1,22 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <html lang="ru">
 
 <head>
   <title>WD: Главная</title>
-  <meta charset="UTF-8">
+  <%--<meta charset="UTF-8">--%>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/vendor/bootstrap/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=cyrillic-ext" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/main.css">
-  <link rel="stylesheet" href="/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
 </head>
-
 <body>
 
 <div class="dashboard-main-wrapper">
   <div class="dashboard-header">
     <nav class="navbar navbar-expand-lg bg-white fixed-top">
-      <a class="navbar-brand" href="..">WHITE DREAM</a>
+      <a class="navbar-brand" href="${pageContext.request.contextPath}/main">WHITE DREAM</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -37,7 +36,7 @@
                   <div class="list-group">
                     <a href="#" class="list-group-item list-group-item-action active">
                       <div class="notification-info">
-                        <div class="notification-list-user-img"><img src="/assets/images/avatar-system.png" alt="" class="user-avatar-md rounded-circle"></div>
+                        <div class="notification-list-user-img"><img src="${pageContext.request.contextPath}/assets/images/avatar-system.png" alt="" class="user-avatar-md rounded-circle"></div>
                         <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span> test test test
                           <div class="notification-date">2 min ago</div>
                         </div>
@@ -45,7 +44,7 @@
                     </a>
                     <a href="#" class="list-group-item list-group-item-action">
                       <div class="notification-info">
-                        <div class="notification-list-user-img"><img src="/assets/images/avatar-system.png" alt="" class="user-avatar-md rounded-circle"></div>
+                        <div class="notification-list-user-img"><img src="${pageContext.request.contextPath}/assets/images/avatar-system.png" alt="" class="user-avatar-md rounded-circle"></div>
                         <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham</span> test test test
                           <div class="notification-date">2 days ago</div>
                         </div>
@@ -53,7 +52,7 @@
                     </a>
                     <a href="#" class="list-group-item list-group-item-action">
                       <div class="notification-info">
-                        <div class="notification-list-user-img"><img src="/assets/images/avatar-system.png" alt="" class="user-avatar-md rounded-circle"></div>
+                        <div class="notification-list-user-img"><img src="${pageContext.request.contextPath}/assets/images/avatar-system.png" alt="" class="user-avatar-md rounded-circle"></div>
                         <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> test test test
                           <div class="notification-date">2 min ago</div>
                         </div>
@@ -61,7 +60,7 @@
                     </a>
                     <a href="#" class="list-group-item list-group-item-action">
                       <div class="notification-info">
-                        <div class="notification-list-user-img"><img src=/assets/images/avatar-system.png" alt="" class="user-avatar-md rounded-circle"></div>
+                        <div class="notification-list-user-img"><img src="${pageContext.request.contextPath}/assets/images/avatar-system.png" alt="" class="user-avatar-md rounded-circle"></div>
                         <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span> test test test
                           <div class="notification-date">2 min ago</div>
                         </div>
@@ -76,13 +75,13 @@
             </ul>
           </li>
           <li class="nav-item dropdown nav-user">
-            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="/assets/images/avatar-user.png" alt="" class="user-login rounded-circle"></a>
+            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="${pageContext.request.contextPath}/assets/images/avatar-user.png" alt="" class="user-login rounded-circle"></a>
             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
               <div class="nav-user-info">
                 <h5 class="mb-0 text-white nav-user-name">UserLogin</h5>
               </div>
               <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Настройки</a>
-              <a class="dropdown-item" href="#"><i class="fas fa-power-off mr-2"></i>Выйти</a>
+              <a class="dropdown-item" href="${pageContext.request.contextPath}/logout"><i class="fas fa-power-off mr-2"></i>Выйти</a>
             </div>
           </li>
         </ul>
@@ -199,10 +198,10 @@
   </div>
 </div>
 
-<script src="/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
-<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
-<script src="/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
-<script src="/assets/js/main-js.js"></script>
+<script src="${pageContext.request.contextPath}/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+<script src="${pageContext.request.contextPath}/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/main-js.js"></script>
 </body>
 
 </html>

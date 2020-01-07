@@ -7,16 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Enumeration;
 
-public class LoginFilter implements Filter {
-    private static final Logger logger = Logger.getLogger(LoginFilter.class);
+public class MainSessionFilter implements Filter {
+    private static final Logger logger = Logger.getLogger(MainSessionFilter.class);
     private FilterConfig fc;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.fc = filterConfig;
-        logger.debug("Login filter initialized");
+        logger.debug("Main filter initialized");
     }
 
     @Override
@@ -25,10 +24,10 @@ public class LoginFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
         String uri = httpServletRequest.getRequestURI();
         HttpSession session = httpServletRequest.getSession(false);
-        //если активна сессия, то вернуть в main
-        if (session != null) {
-            logger.debug("Session ID '" + session.getId() + "' requested to /login/* so redirected to /main");
-            httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/main");
+        //если не активна сессия, то перекинуть на авторизацию
+        if (session == null) {
+            logger.debug("Unknown user requested to /main/* so redirected to /login");
+            httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/login");
         } else {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
         }
