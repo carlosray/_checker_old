@@ -1,27 +1,58 @@
 package com.whitedream.listeners;
 
+import com.whitedream.dao.DBConnectionBuilder;
+import com.whitedream.utils.ServiceConfig;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.*;
+import java.util.Properties;
 
 public class ConfigurationContextListener implements ServletContextListener {
+    private static final Logger logger = Logger.getLogger(ConfigurationContextListener.class);
+
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        //Конфигурирование логгера
         ServletContext context = servletContextEvent.getServletContext();
-        String loggerPropertiesPath = context.getInitParameter("loggerPropertiesPath");
-        String fullPath = context.getRealPath("") + File.separator + loggerPropertiesPath;
-        PropertyConfigurator.configure(fullPath);
-        Logger logger = Logger.getLogger(ConfigurationContextListener.class);
-        logger.info("Context initialized");
+        //Конфигурирование логгера
+        String loggerPropertiesPath = context.getInitParameter("loggerProperties");
+        logger.info("\n<--------------------------------------------------------------------------->" +
+                    "\n<------------------------------SERVER STARTED------------------------------->" +
+                    "\n<--------------------------------------------------------------------------->");
+        loadResourceFile(loggerPropertiesPath);
+        logger.debug("Логгер сконфигурирован");
+        //загрузка конфига проекта
+        String projectPropertiesPath = context.getInitParameter("projectProperties");
+        loadResourceFile(projectPropertiesPath);
+        //инициализация соединения с базой
+        try (Connection connection = DBConnectionBuilder.getConnection()){
+            logger.debug("Соединение с базой установлено");
+        } catch (SQLException e) {
+            logger.error("Ошибка при соединении с базой: " + e.getMessage());
+        }
+        logger.info("_CONTEXT INITIALIZED_\n");
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        logger.info("\n<--------------------------------------------------------------------------->" +
+                    "\n<------------------------------SERVER STOPPED------------------------------->" +
+                    "\n<--------------------------------------------------------------------------->");
+    }
 
+    private void loadResourceFile(String resourceName) {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourceName)) {
+            Properties properties = new Properties();
+            if (is == null) throw new IOException("Файл конфига не найден: '" + resourceName + "'");
+            properties.load(is);
+            ServiceConfig.setConfig(properties);
+            logger.debug("Конфиг загружен: \"" + resourceName + "\"");
+        } catch (IOException e) {
+            logger.error("Ошибка при загрузке конфига: " + e.getMessage());
+        }
     }
 }

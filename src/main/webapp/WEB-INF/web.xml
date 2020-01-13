@@ -14,8 +14,12 @@
     </error-page>
 
     <context-param>
-        <param-name>loggerPropertiesPath</param-name>
-        <param-value>WEB-INF/classes/log4j.properties</param-value>
+        <param-name>loggerProperties</param-name>
+        <param-value>log4j.properties</param-value>
+    </context-param>
+    <context-param>
+        <param-name>projectProperties</param-name>
+        <param-value>project.properties</param-value>
     </context-param>
 
     <servlet>
@@ -29,6 +33,10 @@
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>com.whitedream.servlets.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>com.whitedream.servlets.AuthServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
@@ -50,6 +58,10 @@
     <servlet-mapping>
         <servlet-name>LogOutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/auth</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MainServlet</servlet-name>

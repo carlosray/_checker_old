@@ -41,7 +41,7 @@
                     <input class="form-control form-control-lg" type="email" name="email" required placeholder="E-mail" autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <input class="form-control form-control-lg" id="pass1" type="password" required placeholder="Пароль (7-20 символов)" pattern="[0-9a-zA-Z!@#$%^&*]+" minlength="7" maxlength="20" title="Пароль может содержать цифры, символы латиницы, спец.символы. Длина пароля от 7 до 20 символов">
+                    <input class="form-control form-control-lg" id="pass1" type="password" required placeholder="Пароль (7-20 символов)" pattern="[0-9a-zA-Z!@#$%^&*]+" minlength="7" title="Пароль может содержать цифры, символы латиницы, спец.символы. Длина пароля от 7 символов">
                 </div>
                 <div class="form-group">
                     <input class="form-control form-control-lg" id="pass2" type="password" required placeholder="Повторите пароль" title="Пароль должен совпадать">

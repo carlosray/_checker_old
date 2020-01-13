@@ -1,6 +1,5 @@
 package com.whitedream.autheticate;
 
-import com.whitedream.filters.ContextFilter;
 import org.apache.log4j.Logger;
 
 import javax.security.auth.callback.*;
