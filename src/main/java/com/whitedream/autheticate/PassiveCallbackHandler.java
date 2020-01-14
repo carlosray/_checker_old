@@ -6,7 +6,6 @@ import javax.security.auth.callback.*;
 import java.io.IOException;
 
 public class PassiveCallbackHandler implements CallbackHandler {
-    private static final Logger logger = Logger.getLogger(PassiveCallbackHandler.class);
     private final String username;
     private final String password;
 

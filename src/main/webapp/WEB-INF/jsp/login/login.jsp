@@ -34,7 +34,6 @@
                 <div class="text-danger">${error}</div> <br>
             </c:forEach>
         </div>
-
         <div class="card-body">
             <form method="post" action="${pageContext.request.contextPath}/auth">
                 <div class="form-group">
