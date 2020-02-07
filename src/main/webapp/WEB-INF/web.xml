@@ -22,6 +22,27 @@
         <param-value>project.properties</param-value>
     </context-param>
 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Admin</web-resource-name>
+            <url-pattern>/main/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+        <form-login-page>/login</form-login-page>
+        </form-login-config>
+    </login-config>
+
     <servlet>
         <servlet-name>MainServlet</servlet-name>
         <servlet-class>com.whitedream.servlets.MainServlet</servlet-class>
@@ -107,20 +128,20 @@
         <filter-name>LoginFilter</filter-name>
         <filter-class>com.whitedream.filters.LoginFilter</filter-class>
     </filter>
-    <filter>
+    <!--<filter>
         <filter-name>MainSessionFilter</filter-name>
         <filter-class>com.whitedream.filters.MainSessionFilter</filter-class>
-    </filter>
+    </filter>-->
     <filter-mapping>
         <filter-name>ContextFilter</filter-name>
         <url-pattern>/</url-pattern>
     </filter-mapping>
-    <filter-mapping>
+    <!--<filter-mapping>
         <filter-name>MainSessionFilter</filter-name>
         <url-pattern>/main/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
+    </filter-mapping>-->
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/login/*</url-pattern>

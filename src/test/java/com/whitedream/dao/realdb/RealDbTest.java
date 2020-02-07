@@ -65,13 +65,13 @@ public class RealDbTest {
                     UserDao dao = DaoFactory.getUserDao(connection);
                     User user = new User("testUser", "testPass", new Role("member"));
                     User createdUser = dao.createUser(user);
-                    System.out.println(createdUser);
+                    System.out.println("user: " + createdUser);
                 }
 
                 if (command.equals("getUser")) {
                     UserDao dao = DaoFactory.getUserDao(connection);
-                    User user = dao.getUser(1);
-                    System.out.println(user);
+                    User user = dao.getUser("testUser");
+                    System.out.println("user: " + user);
                 }
 
                 if (command.equals("deleteUser")) {
