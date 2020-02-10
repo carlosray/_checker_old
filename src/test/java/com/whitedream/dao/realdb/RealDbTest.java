@@ -8,6 +8,7 @@ import com.whitedream.dao.util.TestDBConnectionBuilder;
 import com.whitedream.model.Notification;
 import com.whitedream.model.Role;
 import com.whitedream.model.User;
+import com.whitedream.utils.PasswordUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -63,20 +64,20 @@ public class RealDbTest {
 
                 if (command.equals("createUser")) {
                     UserDao dao = DaoFactory.getUserDao(connection);
-                    User user = new User("testUser", "testPass", new Role("member"));
+                    User user = new User("test", "e2FvvzwE0xJmcdI+wBDvcHN0a/gLBYBiH3w9Zc+qdM0=$VOjktb+tzJEIDX4JnBE3UVGCK/GH9zw1KLDc3wqej0k=", new Role("member"));
                     User createdUser = dao.createUser(user);
                     System.out.println("user: " + createdUser);
                 }
 
                 if (command.equals("getUser")) {
                     UserDao dao = DaoFactory.getUserDao(connection);
-                    User user = dao.getUser("testUser");
+                    User user = dao.getUser("test");
                     System.out.println("user: " + user);
                 }
 
                 if (command.equals("deleteUser")) {
                     UserDao dao = DaoFactory.getUserDao(connection);
-                    User user = new User("testUser", "testPass", new Role("member"));
+                    User user = new User("test", "testPass", new Role("member"));
                     dao.deleteUser(user);
                 }
 
@@ -104,6 +105,11 @@ public class RealDbTest {
                 if (command.equals("getAllTypes")){
                     NotificationDao dao = DaoFactory.getNotificationDao(connection);
                     System.out.println(dao.getAllNotificationTypes());
+                }
+
+                if (command.equals("getSaltedPass")){
+                    String pass = "testPass";
+                    System.out.println(PasswordUtils.getSaltedHash(pass));
                 }
 
                 if (command.equals("exit")) {
