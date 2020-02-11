@@ -11,16 +11,15 @@ public class TestDBConnectionBuilder implements ConnectionBuilder {
     private final String URL;
     private final String USER;
     private final String PASSWORD;
-    private static final String PREFIX = "test.";
 
     public TestDBConnectionBuilder() throws IOException {
         InputStream is = getClass().getClassLoader().getResourceAsStream("test.properties");
         Properties properties = new Properties();
         properties.load(is);
-        String driver = properties.getProperty(PREFIX + "db.driver");
-        URL = properties.getProperty(PREFIX + "db.url");
-        USER = properties.getProperty(PREFIX + "db.login");
-        PASSWORD = properties.getProperty(PREFIX + "db.password");
+        String driver = properties.getProperty("test.db.driver");
+        URL = properties.getProperty("test.db.url");
+        USER = properties.getProperty("test.db.login");
+        PASSWORD = properties.getProperty("test.db.password");
         try {
             Class.forName(driver);
             System.out.println(("Драйвер (JDBC) загружен: " + driver));

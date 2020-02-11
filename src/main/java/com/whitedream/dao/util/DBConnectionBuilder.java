@@ -11,16 +11,15 @@ import java.util.Properties;
 public class DBConnectionBuilder implements ConnectionBuilder{
     private static final Logger logger = Logger.getLogger(DBConnectionBuilder.class);
     private static final Properties PROPERTIES = ServiceConfig.getConfig();
-    private final String URL;
-    private final String USER;
-    private final String PASSWORD;
-    private static final String PREFIX = "lite.";
+    private static final String URL;
+    private static final String USER;
+    private static final String PASSWORD;
 
-    public DBConnectionBuilder() {
-        String driver = PROPERTIES.getProperty(PREFIX + "db.driver");
-        URL = PROPERTIES.getProperty(PREFIX + "db.url");
-        USER = PROPERTIES.getProperty(PREFIX + "db.login");
-        PASSWORD = PROPERTIES.getProperty(PREFIX + "db.password");
+    static {
+        String driver = PROPERTIES.getProperty("db.driver");
+        URL = PROPERTIES.getProperty("db.url");
+        USER = PROPERTIES.getProperty("db.login");
+        PASSWORD = PROPERTIES.getProperty("db.password");
         try {
             Class.forName(driver);
             logger.debug("Драйвер (JDBC) загружен: " + driver);
