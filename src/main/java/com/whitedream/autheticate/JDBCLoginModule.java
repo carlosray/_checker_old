@@ -5,6 +5,7 @@ import com.whitedream.autheticate.principal.RolePrincipal;
 import com.whitedream.autheticate.principal.UserPrincipal;
 import com.whitedream.dao.DaoFactory;
 import com.whitedream.dao.UserDao;
+import com.whitedream.dao.exception.NoEntityExistsException;
 import com.whitedream.dao.util.ConnectionBuilder;
 import com.whitedream.dao.util.DBConnectionBuilder;
 import com.whitedream.model.User;
@@ -80,47 +81,48 @@ public class JDBCLoginModule implements LoginModule {
                 succeeded = true;
                 return true;
             }
+            else {
+                throw new LoginException("Неправильное имя пользователя или пароль");
+            }
         } catch (Exception e) {
-            logger.warn("Ошибка аутентификации", e);
-            throw new LoginException("Ошибка аутентификации" + e.getMessage());
+            throw new LoginException("Ошибка аутентификации: " + e.getMessage());
         }
-        return false;
     }
 
-    private boolean isValidUser() {
+    private boolean isValidUser() throws Exception {
         try (Connection connection = connectionBuilder.getConnection()) {
             UserDao userDao = DaoFactory.getUserDao(connection);
             user = userDao.getUser(username);
             return PasswordUtils.check(Arrays.toString(password), user.getPassword());
+        } catch (NoEntityExistsException e) {
+            return false;
         } catch (Exception e) {
-            logger.warn("Ошибка при валидации пользователя", e);
+            throw new LoginException(e.getMessage());
         }
-        return false;
     }
 
     @Override
     public boolean commit() {
         if (!succeeded) {
             return false;
-        }
-        else {
+        } else {
             String logMessage = String.format("Пользователь '%s' : ", user.getUserName());
             userPrincipal = new UserPrincipal(user.getUserName());
-            if (!subject.getPrincipals().contains(userPrincipal)){
+            if (!subject.getPrincipals().contains(userPrincipal)) {
                 subject.getPrincipals().add(userPrincipal);
                 logMessage += " | добавлен principal: " + userPrincipal;
             }
             passwordPrincipal = new PasswordPrincipal(user.getPassword());
-            if (!subject.getPrincipals().contains(passwordPrincipal)){
+            if (!subject.getPrincipals().contains(passwordPrincipal)) {
                 subject.getPrincipals().add(passwordPrincipal);
                 logMessage += " | добавлен principal: " + passwordPrincipal;
             }
             rolePrincipal = new RolePrincipal(user.getRole().getRoleName());
-            if (!subject.getPrincipals().contains(rolePrincipal)){
+            if (!subject.getPrincipals().contains(rolePrincipal)) {
                 subject.getPrincipals().add(rolePrincipal);
                 logMessage += " | добавлен principal: " + rolePrincipal;
             }
-            if (debug){
+            if (debug) {
                 logger.debug(logMessage);
             }
             subject.getPrivateCredentials().add(user);

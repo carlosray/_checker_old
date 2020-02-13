@@ -19,8 +19,8 @@ public class RealDbTest {
     public static void main(String[] args) throws Exception {
 
         System.out.println("----------------------------------\n" +
-                            "---------------Start--------------\n" +
-                            "----------------------------------");
+                "---------------Start--------------\n" +
+                "----------------------------------");
         TestDBConnectionBuilder builder = new TestDBConnectionBuilder();
         Connection connection = builder.getConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -78,17 +78,17 @@ public class RealDbTest {
 
                 if (command.equals("deleteUser")) {
                     UserDao dao = DaoFactory.getUserDao(connection);
-                    User user = new User("test", "testPass", new Role("member"));
+                    User user = new User("testuser", "testPass", new Role("member"));
                     dao.deleteUser(user);
                 }
 
-                if (command.equals("getAllUsers")){
+                if (command.equals("getAllUsers")) {
                     UserDao dao = DaoFactory.getUserDao(connection);
                     List<User> allUsers = dao.getAllUsers();
                     System.out.println(allUsers);
                 }
 
-                if (command.equals("createNotif")){
+                if (command.equals("createNotif")) {
                     NotificationDao dao = DaoFactory.getNotificationDao(connection);
                     UserDao userDao = DaoFactory.getUserDao(connection);
                     User user = userDao.getUser("testUser");
@@ -97,17 +97,23 @@ public class RealDbTest {
                     System.out.println(createdNotification);
                 }
 
-                if (command.equals("getNotifByAddress")){
+                if (command.equals("getNotifByAddress")) {
                     NotificationDao dao = DaoFactory.getNotificationDao(connection);
                     List<Notification> testAddress = dao.getNotificationsByAddress("testAddress");
                     System.out.println(testAddress);
                 }
 
-                if (command.equals("getAllTypes")){
+                if (command.equals("getAllTypes")) {
                     NotificationDao dao = DaoFactory.getNotificationDao(connection);
                     System.out.println(dao.getAllNotificationTypes());
                 }
 
+                if (command.equals("passUtils")) {
+                    UserDao dao = DaoFactory.getUserDao(connection);
+                    User testuser = dao.getUser("testuser");
+                    System.out.println("Пароль в базе: " + testuser.getPassword());
+                    PasswordUtils.check("userpass01", testuser.getPassword());
+                }
 
                 if (command.equals("exit")) {
                     break;
@@ -116,7 +122,9 @@ public class RealDbTest {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             System.out.println("time (ms): " + (System.currentTimeMillis() - time));
         }
+        connection.close();
     }
 }

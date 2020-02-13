@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -30,6 +30,9 @@
 <div class="splash-container">
     <div class="card ">
         <div class="card-header text-center"><a href="${pageContext.request.contextPath}/main"><img class="logo-img" src="${pageContext.request.contextPath}/assets/images/logo.png" alt="logo"></a><span class="splash-description">Пожалуйста, введите свои данные</span>
+        <c:forEach var="err" items="${requestScope.errors}">
+        <p style="color:#FF8166">${err}</p>
+        </c:forEach>
         </div>
         <div class="card-body">
             <form method="post" action="${pageContext.request.contextPath}/auth">

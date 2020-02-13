@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Realm className="org.apache.catalina.realm.JAASRealm"
+       appName="Checker"
+       userClassNames="com.whitedream.autheticate.principal.UserPrincipal,com.whitedream.autheticate.principal.PasswordPrincipal"
+       roleClassNames="com.whitedream.autheticate.principal.RolePrincipal"/>

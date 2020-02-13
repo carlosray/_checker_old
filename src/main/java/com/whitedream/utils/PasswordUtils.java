@@ -4,6 +4,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
+import java.util.Arrays;
 import java.util.Base64;
 
 public class PasswordUtils {
@@ -29,7 +30,7 @@ public class PasswordUtils {
      * @param storedPass хранимый пароль (в базе) в виде salt$hash
      */
     public static boolean check(String inputPass, String storedPass) throws Exception{
-        String[] saltAndHash = storedPass.split("$");
+        String[] saltAndHash = storedPass.split("\\$");
         if (saltAndHash.length != 2) {
             throw new IllegalStateException(
                     "The stored password must have the form 'salt$hash'");
