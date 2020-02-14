@@ -112,7 +112,8 @@ public class RealDbTest {
                     UserDao dao = DaoFactory.getUserDao(connection);
                     User testuser = dao.getUser("testuser");
                     System.out.println("Пароль в базе: " + testuser.getPassword());
-                    PasswordUtils.check("userpass01", testuser.getPassword());
+                    boolean check = PasswordUtils.check("testpass01", testuser.getPassword());
+                    System.out.println(check);
                 }
 
                 if (command.equals("exit")) {
