@@ -22,7 +22,7 @@ public class PasswordUtils {
         if (password == null || password.length() == 0)
             throw new IllegalArgumentException("Empty passwords are not supported.");
         byte[] salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(saltLen);
-        return Base64.encodeBase64String(salt) + "$" + hash(password, salt);
+        return Base64.encodeBase64String(salt) + "$" + hash(password.toCharArray(), salt);
     }
 
     /**
@@ -30,21 +30,19 @@ public class PasswordUtils {
      * @param inputPass введенный пароль
      * @param storedPass хранимый пароль (в базе) в виде salt$hash
      */
-    public static boolean check(String inputPass, String storedPass) throws Exception{
+    public static boolean check(char[] inputPass, String storedPass) throws Exception{
         String[] saltAndHash = storedPass.split("\\$");
-        System.out.println(Arrays.toString(saltAndHash));
         if (saltAndHash.length != 2) {
             throw new IllegalStateException(
                     "The stored password must have the form 'salt$hash'");
         }
         String inputPassHash = hash(inputPass, Base64.decodeBase64(saltAndHash[0]));
-        System.out.println("inputPassHash: " + inputPassHash);
         return inputPassHash.equals(saltAndHash[1]);
     }
 
-    private static String hash(String password, byte[] salt) throws Exception{
+    private static String hash(char[] password, byte[] salt) throws Exception{
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, keyLen);
+        KeySpec spec = new PBEKeySpec(password, salt, iterations, keyLen);
         SecretKey secretKey = f.generateSecret(spec);
         return Base64.encodeBase64String(secretKey.getEncoded());
     }

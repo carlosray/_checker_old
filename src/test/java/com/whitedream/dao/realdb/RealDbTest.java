@@ -64,7 +64,7 @@ public class RealDbTest {
 
                 if (command.equals("createUser")) {
                     UserDao dao = DaoFactory.getUserDao(connection);
-                    String testPass = "testpass01";
+                    String testPass = "testpass";
                     User user = new User("testuser", PasswordUtils.getSaltedHash(testPass), new Role("member"));
                     User createdUser = dao.createUser(user);
                     System.out.println("user: " + createdUser);
@@ -72,13 +72,13 @@ public class RealDbTest {
 
                 if (command.equals("getUser")) {
                     UserDao dao = DaoFactory.getUserDao(connection);
-                    User user = dao.getUser("test");
+                    User user = dao.getUser("testuser");
                     System.out.println("user: " + user);
                 }
 
                 if (command.equals("deleteUser")) {
                     UserDao dao = DaoFactory.getUserDao(connection);
-                    User user = new User("testuser", "testPass", new Role("member"));
+                    User user = new User("testuser", "asdadad", new Role("member"));
                     dao.deleteUser(user);
                 }
 
@@ -91,7 +91,7 @@ public class RealDbTest {
                 if (command.equals("createNotif")) {
                     NotificationDao dao = DaoFactory.getNotificationDao(connection);
                     UserDao userDao = DaoFactory.getUserDao(connection);
-                    User user = userDao.getUser("testUser");
+                    User user = userDao.getUser("testuser");
                     Notification notification = new Notification("email", "testAddress", user);
                     Notification createdNotification = dao.createNotification(notification);
                     System.out.println(createdNotification);
@@ -112,7 +112,9 @@ public class RealDbTest {
                     UserDao dao = DaoFactory.getUserDao(connection);
                     User testuser = dao.getUser("testuser");
                     System.out.println("Пароль в базе: " + testuser.getPassword());
-                    boolean check = PasswordUtils.check("testpass01", testuser.getPassword());
+                    char[] password = new char[]{'t', 'e', 's', 't', 'p', 'a', 's', 's'};
+                    System.out.println(password);
+                    boolean check = PasswordUtils.check(password, testuser.getPassword());
                     System.out.println(check);
                 }
 

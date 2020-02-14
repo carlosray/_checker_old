@@ -118,6 +118,9 @@
         <listener-class>
             com.whitedream.listeners.ConfigurationContextListener
         </listener-class>
+        <listener-class>
+            com.whitedream.listeners.SessionLoginContext
+        </listener-class>
     </listener>
 
     <filter>

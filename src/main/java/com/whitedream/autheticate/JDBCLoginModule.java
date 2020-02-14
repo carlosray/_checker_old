@@ -93,7 +93,7 @@ public class JDBCLoginModule implements LoginModule {
         try (Connection connection = connectionBuilder.getConnection()) {
             UserDao userDao = DaoFactory.getUserDao(connection);
             user = userDao.getUser(username);
-            return PasswordUtils.check(Arrays.toString(password), user.getPassword());
+            return PasswordUtils.check(password, user.getPassword());
         } catch (NoEntityExistsException e) {
             return false;
         } catch (Exception e) {

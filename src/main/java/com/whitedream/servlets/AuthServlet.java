@@ -53,8 +53,10 @@ public class AuthServlet extends HttpServlet {
             Set<Object> privateCredentials = loginContext.getSubject().getPrivateCredentials();
             if (!privateCredentials.isEmpty()) {
                 User user = (User) privateCredentials.iterator().next();
+                logger.debug(user);
                 HttpSession session = req.getSession();
                 session.setAttribute("user", user);
+                resp.sendRedirect(req.getContextPath() + "/main");
             }
         }
         //TODO послать редирект на страницу с общей ошибкой "что-то пошло не так"
