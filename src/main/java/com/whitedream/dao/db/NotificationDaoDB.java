@@ -56,7 +56,7 @@ public class NotificationDaoDB implements NotificationDao {
                 int userId = resultSet.getInt("user_id");
                 User user = DaoFactory.getUserDao(connection).getUser(userId);
                 Date date = resultSet.getDate("created_at");
-                Notification notification = new Notification(type, destAddress, user, date);
+                Notification notification = new Notification(, destAddress, user, date);
                 logger.debug("Успешно запрошено уведомление (notification) из БД по ID: " + id);
                 return notification;
             } else {

@@ -1,15 +1,33 @@
 package com.whitedream.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "users")
 public class User implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "user_name")
     private String userName;
+
+    @Column(name = "user_name")
     private String password;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_role_id")
     private Role role;
+
+    @Column(name = "created_at")
     private Date creationDate;
+
+    @OneToMany(mappedBy = "user_id", fetch = FetchType.EAGER)
+    private Collection<Notification> notificationsByUser;
 
     public User(String userName, String password, Role role) {
         this.userName = userName;
@@ -23,6 +41,14 @@ public class User implements Serializable {
         this.password = password;
         this.role = role;
         this.creationDate = creationDate;
+    }
+
+    public Collection<Notification> getNotificationsByUser() {
+        return notificationsByUser;
+    }
+
+    public void setNotificationsByUser(Collection<Notification> notificationsByUser) {
+        this.notificationsByUser = notificationsByUser;
     }
 
     public String getUserName() {

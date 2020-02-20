@@ -1,11 +1,26 @@
 package com.whitedream.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 
+@Entity
+@Table(name = "roles")
 public class Role implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private int id;
+
+    @Column(name = "role_name")
     private String roleName;
+
+    @OneToMany(mappedBy = "user_role_id", fetch = FetchType.EAGER)
+    private Collection<User> usersInRole;
+
+    public Role() {
+    }
 
     public Role(String roleName) {
         this.roleName = roleName;
@@ -14,6 +29,14 @@ public class Role implements Serializable {
     public Role(int id, String roleName) {
         this.id = id;
         this.roleName = roleName;
+    }
+
+    public Collection<User> getUsersInRole() {
+        return usersInRole;
+    }
+
+    public void setUsersInRole(Collection<User> usersInRole) {
+        this.usersInRole = usersInRole;
     }
 
     public int getId() {
