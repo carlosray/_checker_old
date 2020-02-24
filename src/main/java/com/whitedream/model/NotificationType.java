@@ -69,7 +69,6 @@ public class NotificationType {
         return "NotificationType{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", notificationsByType=" + notificationsByType +
                 '}';
     }
 }

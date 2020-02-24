@@ -60,12 +60,13 @@ public class Role implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return roleName.equals(role.roleName);
+        return id == role.id &&
+                roleName.equals(role.roleName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(roleName);
+        return Objects.hash(id, roleName);
     }
 
     @Override

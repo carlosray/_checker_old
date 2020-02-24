@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8"%>
+<%@ page pageEncoding="UTF-8" isErrorPage="true" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html lang="ru">
 <head>
@@ -30,17 +30,20 @@
 <div class="splash-container">
     <div class="card ">
         <div class="card-header text-center"><a href="${pageContext.request.contextPath}/main"><img class="logo-img" src="${pageContext.request.contextPath}/assets/images/logo.png" alt="logo"></a><span class="splash-description">Пожалуйста, введите свои данные</span>
-        <c:forEach var="err" items="${requestScope.errors}">
+        <%--<c:forEach var="err" items="${requestScope.errors}">
         <p style="color:#FF8166">${err}</p>
-        </c:forEach>
+        </c:forEach>--%>
+            <c:if test="${param.error != null}">
+                <p style="color:#FF8166">Некорректное имя пользователя или пароль</p>
+            </c:if>
         </div>
         <div class="card-body">
-            <form method="post" action="${pageContext.request.contextPath}/auth">
+            <form method="post" action="j_security_check">
                 <div class="form-group">
-                    <input class="form-control form-control-lg" name="username" id="username" type="text" placeholder="Логин" autocomplete="off" required pattern="[a-zA-Z]+" minlength="5" maxlength="20" title="Логин или почта">
+                    <input class="form-control form-control-lg" name="j_username" id="username" type="text" placeholder="Логин" autocomplete="off" required pattern="[a-zA-Z]+" minlength="5" maxlength="20" title="Логин или почта">
                 </div>
                 <div class="form-group">
-                    <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Пароль" required>
+                    <input class="form-control form-control-lg" name="j_password" id="password" type="password" placeholder="Пароль" required>
                 </div>
                 <div class="form-group">
                     <label class="custom-control custom-checkbox">

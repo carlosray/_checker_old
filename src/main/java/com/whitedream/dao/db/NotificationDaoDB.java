@@ -2,10 +2,12 @@ package com.whitedream.dao.db;
 
 import com.whitedream.dao.DaoFactory;
 import com.whitedream.dao.NotificationDao;
+import com.whitedream.dao.NotificationTypeDao;
 import com.whitedream.dao.UserDao;
 import com.whitedream.dao.exception.EntityAlreadyExistsException;
 import com.whitedream.dao.exception.NoEntityExistsException;
 import com.whitedream.model.Notification;
+import com.whitedream.model.NotificationType;
 import com.whitedream.model.User;
 import org.apache.log4j.Logger;
 
@@ -33,7 +35,6 @@ public class NotificationDaoDB implements NotificationDao {
             "WHERE notifications.user_id = ?";
     private static final String GET_ALL_NOTIFICATIONS = "SELECT * FROM notifications " +
             "JOIN notification_types ON notification_types.notification_type_id = notifications.notification_type_id ";
-    private static final String GET_NOTIFICATION_TYPES = "SELECT * FROM notification_types";
     private static final String CREATE_NOTIFICATION = "INSERT INTO notifications (notification_type_id, user_id, destination_address, created_at) VALUES (?,?,?,?)";
     private static final String GET_NOTIFICATION_TYPE_ID_BY_NAME = "SELECT notification_type_id FROM notification_types WHERE notification_type_name = ?";
     private static final String UPDATE_NOTIFICATION = "UPDATE notifications SET ? = ? WHERE notification_type_id = ? and user_id = ? and destination_address = ?";
@@ -51,12 +52,14 @@ public class NotificationDaoDB implements NotificationDao {
             ps.setInt(1, id);
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
-                String type = resultSet.getString("notification_type_name");
+                String typeName = resultSet.getString("notification_type_name");
+                int typeId = resultSet.getInt("notification_type_id");
+                NotificationType type = new NotificationType(typeId, typeName);
                 String destAddress = resultSet.getString("destination_address");
                 int userId = resultSet.getInt("user_id");
                 User user = DaoFactory.getUserDao(connection).getUser(userId);
                 Date date = resultSet.getDate("created_at");
-                Notification notification = new Notification(, destAddress, user, date);
+                Notification notification = new Notification(type, destAddress, user, date);
                 logger.debug("Успешно запрошено уведомление (notification) из БД по ID: " + id);
                 return notification;
             } else {
@@ -69,22 +72,6 @@ public class NotificationDaoDB implements NotificationDao {
         return null;
     }
 
-    @Override
-    public List<String> getAllNotificationTypes() {
-        List<String> types = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement(GET_NOTIFICATION_TYPES);
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                String type = resultSet.getString("notification_type_name");
-                types.add(type);
-            }
-            logger.debug("Успешно запрошен список всех типов уведомлений (notification) ");
-        } catch (SQLException e) {
-            logger.error("Ошибка при получении списка всех типов уведомлений (notification): " + e.getMessage());
-        }
-        return types;
-    }
 
     @Override
     public List<Notification> getNotificationsByAddress(String destinationAddress) {
@@ -95,7 +82,9 @@ public class NotificationDaoDB implements NotificationDao {
             ps.setObject(1, destinationAddress);
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                String type = resultSet.getString("notification_type_name");
+                String typeName = resultSet.getString("notification_type_name");
+                int typeId = resultSet.getInt("notification_type_id");
+                NotificationType type = new NotificationType(typeId, typeName);
                 int userId = resultSet.getInt("user_id");
                 User user = DaoFactory.getUserDao(connection).getUser(userId);
                 Date date = resultSet.getDate("created_at");
@@ -118,7 +107,9 @@ public class NotificationDaoDB implements NotificationDao {
             ps.setInt(1, user.getId());
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                String type = resultSet.getString("notification_type_name");
+                String typeName = resultSet.getString("notification_type_name");
+                int typeId = resultSet.getInt("notification_type_id");
+                NotificationType type = new NotificationType(typeId, typeName);
                 User userDB = DaoFactory.getUserDao(connection).getUser(user.getId());
                 Date date = resultSet.getDate("created_at");
                 String destinationAddress = resultSet.getString("destination_address");
@@ -133,12 +124,12 @@ public class NotificationDaoDB implements NotificationDao {
     }
 
     @Override
-    public List<Notification> getNotificationsByType(String notificationType) {
+    public List<Notification> getNotificationsByType(NotificationType notificationType) {
         if (notificationType == null) throw new IllegalArgumentException("Тип уведомления (notificationType) не может быть null");
         List<Notification> notifications = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(GET_NOTIFICATION_BY_TYPE);
-            ps.setObject(1, notificationType);
+            ps.setObject(1, notificationType.getName());
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 int userId = resultSet.getInt("user_id");
@@ -162,7 +153,7 @@ public class NotificationDaoDB implements NotificationDao {
             if (isNotificationExist(notification)) {
                 throw new EntityAlreadyExistsException("Данное уведомление уже есть в базе");
             }
-            int typeId = getNotificationTypeId(notification.getType());
+            int typeId = getNotificationTypeId(notification.getType().getName());
             if (typeId == -1) {
                 throw new IllegalArgumentException("Не найден данный тип уведомления: " + notification.getType());
             }
@@ -199,17 +190,17 @@ public class NotificationDaoDB implements NotificationDao {
     }
 
     @Override
-    public void changeNotificationType(Notification notification, String newType) throws NoEntityExistsException {
+    public void changeNotificationType(Notification notification, NotificationType newType) throws NoEntityExistsException {
         if (notification == null || newType == null) throw new IllegalArgumentException("Уведомление (notification) или новый тип не может быть null");
         try {
             if (!isNotificationExist(notification)) {
                 throw new NoEntityExistsException("Данное уведомление не найдено в базе");
             }
-            int typeIdOld = getNotificationTypeId(notification.getType());
+            int typeIdOld = getNotificationTypeId(notification.getType().getName());
             if (typeIdOld == -1) {
                 throw new IllegalArgumentException("Не найден данный тип уведомления: " + notification.getType());
             }
-            int typeIdNew = getNotificationTypeId(newType);
+            int typeIdNew = getNotificationTypeId(newType.getName());
             if (typeIdNew == -1) throw new IllegalArgumentException("Не найден данный тип уведомления: " + newType);
             int userId = notification.getUser().getId();
             if (userId == 0) {
@@ -242,7 +233,7 @@ public class NotificationDaoDB implements NotificationDao {
             if (!isNotificationExist(notification)) {
                 throw new NoEntityExistsException("Данное уведомление не найдено в базе");
             }
-            int typeId = getNotificationTypeId(notification.getType());
+            int typeId = getNotificationTypeId(notification.getType().getName());
             if (typeId == -1) {
                 throw new IllegalArgumentException("Не найден данный тип уведомления: " + notification.getType());
             }
@@ -277,7 +268,7 @@ public class NotificationDaoDB implements NotificationDao {
             if (!isNotificationExist(notification)) {
                 throw new NoEntityExistsException("Данное уведомление не найдено в базе");
             }
-            int typeId = getNotificationTypeId(notification.getType());
+            int typeId = getNotificationTypeId(notification.getType().getName());
             if (typeId == -1) {
                 throw new IllegalArgumentException("Не найден данный тип уведомления: " + notification.getType());
             }
@@ -312,8 +303,10 @@ public class NotificationDaoDB implements NotificationDao {
                 User user = DaoFactory.getUserDao(connection).getUser(userId);
                 Date date = resultSet.getDate("created_at");
                 String destinationAddress = resultSet.getString("destination_address");
-                String notificationType = resultSet.getString("notification_type_name");
-                Notification notification = new Notification(notificationType, destinationAddress, user, date);
+                String typeName = resultSet.getString("notification_type_name");
+                int typeId = resultSet.getInt("notification_type_id");
+                NotificationType type = new NotificationType(typeId, typeName);
+                Notification notification = new Notification(type, destinationAddress, user, date);
                 notifications.add(notification);
             }
             logger.debug("Успешно запрошен список всех уведомлений (notification)");

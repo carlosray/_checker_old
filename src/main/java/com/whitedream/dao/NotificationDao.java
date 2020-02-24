@@ -3,6 +3,7 @@ package com.whitedream.dao;
 import com.whitedream.dao.exception.EntityAlreadyExistsException;
 import com.whitedream.dao.exception.NoEntityExistsException;
 import com.whitedream.model.Notification;
+import com.whitedream.model.NotificationType;
 import com.whitedream.model.User;
 
 import java.util.List;
@@ -16,12 +17,6 @@ public interface NotificationDao {
      * @throws NoEntityExistsException бросает исключение, если уведомления не существует
      */
     Notification getNotification(int id) throws NoEntityExistsException;
-
-    /**
-     * получить все типы уведомлений
-     * @return список типов
-     */
-    List<String> getAllNotificationTypes();
 
     /**
      * получить уведомление по адресу назначения
@@ -42,7 +37,7 @@ public interface NotificationDao {
      * @param notificationType тип уведомления
      * @return возвращает уведомление
      */
-    List<Notification> getNotificationsByType(String notificationType);
+    List<Notification> getNotificationsByType(NotificationType notificationType);
 
     /**
      * Создать новое уведомление
@@ -57,7 +52,7 @@ public interface NotificationDao {
      * @param newType новый тип
      * @throws NoEntityExistsException бросает исключение, если уведомления не существует
      */
-    void changeNotificationType(Notification notification, String newType) throws NoEntityExistsException;
+    void changeNotificationType(Notification notification, NotificationType newType) throws NoEntityExistsException;
 
     /**
      * Изменить адрес назначения

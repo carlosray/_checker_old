@@ -1,6 +1,5 @@
 package com.whitedream.autheticate;
 
-import com.whitedream.autheticate.principal.PasswordPrincipal;
 import com.whitedream.autheticate.principal.RolePrincipal;
 import com.whitedream.autheticate.principal.UserPrincipal;
 import com.whitedream.dao.DaoFactory;
@@ -37,7 +36,6 @@ public class JDBCLoginModule implements LoginModule {
 
     //user principle
     private UserPrincipal userPrincipal = null;
-    private PasswordPrincipal passwordPrincipal = null;
     private RolePrincipal rolePrincipal = null;
     private User user;
 
@@ -85,6 +83,8 @@ public class JDBCLoginModule implements LoginModule {
                 throw new LoginException("Неправильное имя пользователя или пароль");
             }
         } catch (Exception e) {
+            logger.error("Ошибка аутентификации: " + e.getMessage());
+            if (debug) logger.error(e);
             throw new LoginException("Ошибка аутентификации: " + e.getMessage());
         }
     }
@@ -111,11 +111,6 @@ public class JDBCLoginModule implements LoginModule {
             if (!subject.getPrincipals().contains(userPrincipal)) {
                 subject.getPrincipals().add(userPrincipal);
                 logMessage += " | добавлен principal: " + userPrincipal;
-            }
-            passwordPrincipal = new PasswordPrincipal(user.getPassword());
-            if (!subject.getPrincipals().contains(passwordPrincipal)) {
-                subject.getPrincipals().add(passwordPrincipal);
-                logMessage += " | добавлен principal: " + passwordPrincipal;
             }
             rolePrincipal = new RolePrincipal(user.getRole().getRoleName());
             if (!subject.getPrincipals().contains(rolePrincipal)) {
@@ -153,7 +148,6 @@ public class JDBCLoginModule implements LoginModule {
     @Override
     public boolean logout() {
         subject.getPrincipals().remove(userPrincipal);
-        subject.getPrincipals().remove(passwordPrincipal);
         subject.getPrincipals().remove(rolePrincipal);
         succeeded = false;
         succeeded = commitSucceeded;
@@ -163,7 +157,6 @@ public class JDBCLoginModule implements LoginModule {
             password = null;
         }
         userPrincipal = null;
-        passwordPrincipal = null;
         rolePrincipal = null;
         return true;
     }

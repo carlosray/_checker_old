@@ -24,22 +24,27 @@
 
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Admin</web-resource-name>
-            <url-pattern>/main/*</url-pattern>
+            <web-resource-name>AllUsers</web-resource-name>
+            <url-pattern>/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>
+            <role-name>member</role-name>
         </auth-constraint>
     </security-constraint>
 
     <security-role>
         <role-name>admin</role-name>
     </security-role>
+    <security-role>
+        <role-name>member</role-name>
+    </security-role>
 
     <login-config>
         <auth-method>FORM</auth-method>
         <form-login-config>
-        <form-login-page>/login</form-login-page>
+            <form-login-page>/login</form-login-page>
+            <form-error-page>/login?error=true</form-error-page>
         </form-login-config>
     </login-config>
 
@@ -118,9 +123,9 @@
         <listener-class>
             com.whitedream.listeners.ConfigurationContextListener
         </listener-class>
-        <listener-class>
+        <!--<listener-class>
             com.whitedream.listeners.SessionLoginContext
-        </listener-class>
+        </listener-class>-->
     </listener>
 
     <filter>

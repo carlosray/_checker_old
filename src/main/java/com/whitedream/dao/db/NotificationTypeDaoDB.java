@@ -10,10 +10,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationTypeDaoDB implements NotificationTypeDao {
     private static final Logger logger = Logger.getLogger(NotificationTypeDaoDB.class);
+    private static final String GET_ALL_NOTIFICATION_TYPES = "SELECT * FROM notification_types";
     private static final String GET_NOTIFICATION_BY_ID = "SELECT * FROM notification_types WHERE notification_type_id = ?";
     private static final String GET_NOTIFICATION_BY_NAME = "SELECT * FROM notification_types WHERE notification_type_name = ?";
     private static final String CREATE_NOTIFICATION_TYPE = "INSERT INTO notification_types (notification_type_name) VALUES (?)";
@@ -28,10 +30,19 @@ public class NotificationTypeDaoDB implements NotificationTypeDao {
 
     @Override
     public List<NotificationType> getAllNotificationTypes() {
+        List<NotificationType> list = new ArrayList<>();
         try {
-
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_NOTIFICATION_TYPES);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("notification_type_id");
+                String name = resultSet.getString("notification_type_name1");
+                list.add(new NotificationType(id, name));
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
         }
-        return null;
+        return list;
     }
 
     @Override

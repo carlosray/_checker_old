@@ -1,6 +1,6 @@
 <Context>
     <Realm className="org.apache.catalina.realm.JAASRealm"
            appName="Checker"
-           userClassNames="com.whitedream.autheticate.principal.UserPrincipal,com.whitedream.autheticate.principal.PasswordPrincipal"
+           userClassNames="com.whitedream.autheticate.principal.UserPrincipal"
            roleClassNames="com.whitedream.autheticate.principal.RolePrincipal"/>
 </Context>

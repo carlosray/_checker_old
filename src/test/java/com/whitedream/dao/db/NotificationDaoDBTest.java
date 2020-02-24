@@ -4,6 +4,7 @@ import com.whitedream.dao.NotificationDao;
 import com.whitedream.dao.exception.EntityAlreadyExistsException;
 import com.whitedream.dao.exception.NoEntityExistsException;
 import com.whitedream.model.Notification;
+import com.whitedream.model.NotificationType;
 import com.whitedream.model.Role;
 import com.whitedream.model.User;
 import org.junit.Assert;
@@ -39,7 +40,7 @@ public class NotificationDaoDBTest {
         Mockito.when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
         dao = new NotificationDaoDB(connection);
-        notification = new Notification("email", "test@mail.ru", new User(1, "usera", "usera", new Role("admin"), new Date()));
+        notification = new Notification(new NotificationType(1, "email"), "test@mail.ru", new User(1, "usera", "usera", new Role("admin"), new Date()));
 
     }
 
@@ -63,9 +64,9 @@ public class NotificationDaoDBTest {
         Mockito.when(resultSet.getDate("created_at")).thenReturn(new java.sql.Date(notification.getUser().getCreationDate().getTime()));
         Notification notificationTest = dao.getNotification(1);
         Assert.assertEquals(notification, notificationTest);
-        Notification notTestEmail = new Notification("email", "other@mail.ru", new User(1, "usera", "usera", new Role("admin"), new Date()));
+        Notification notTestEmail = new Notification(new NotificationType(1, "email"), "other@mail.ru", new User(1, "usera", "usera", new Role("admin"), new Date()));
         Assert.assertNotEquals(notTestEmail, notificationTest);
-        Notification notTestRole = new Notification("email", "test@mail.ru", new User(1, "usera", "usera", new Role("member"), new Date()));
+        Notification notTestRole = new Notification(new NotificationType(1, "email"), "test@mail.ru", new User(1, "usera", "usera", new Role("member"), new Date()));
         Assert.assertNotEquals(notTestRole, notificationTest);
     }
 
@@ -87,7 +88,7 @@ public class NotificationDaoDBTest {
 
     private void mockMethodIsNotificationExist(boolean isExist) throws SQLException {
         Mockito.when(resultSet.next()).thenReturn(isExist).thenReturn(true).thenReturn(true).thenReturn(false);
-        Mockito.when(resultSet.getString("notification_type_name")).thenReturn(notification.getType());
+        Mockito.when(resultSet.getString("notification_type_name")).thenReturn(notification.getType().getName());
         Mockito.when(resultSet.getString("destination_address")).thenReturn(notification.getDestinationAddress());
         Mockito.when(resultSet.getDate("created_at")).thenReturn(new java.sql.Date(notification.getUser().getCreationDate().getTime())).thenReturn(new java.sql.Date(notification.getUser().getCreationDate().getTime()));
         Mockito.when(resultSet.getString("user_name")).thenReturn("usera");
@@ -100,6 +101,6 @@ public class NotificationDaoDBTest {
     @Test(expected = NoEntityExistsException.class)
     public void changeNotificationTypeNotExist() throws SQLException, NoEntityExistsException {
         mockMethodIsNotificationExist(false);
-        dao.changeNotificationType(notification, "newType");
+        dao.changeNotificationType(notification, new NotificationType(3, "newType"));
     }
 }

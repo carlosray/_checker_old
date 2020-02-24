@@ -20,6 +20,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Используется FORM Authentication (j_security_check)
+ */
+@Deprecated
 public class AuthServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(AuthServlet.class);
 
@@ -42,7 +46,7 @@ public class AuthServlet extends HttpServlet {
         PassiveCallbackHandler cbh = new PassiveCallbackHandler(username, password);
         SessionLoginContext loginContext = null;
         try {
-            loginContext = new SessionLoginContext("Checker", cbh);
+            loginContext = new SessionLoginContext(SessionLoginContext.getName(), cbh);
             loginContext.login();
         } catch (LoginException e) {
             logger.debug(e.getMessage() + " | IP " + req.getRemoteAddr());
@@ -50,17 +54,13 @@ public class AuthServlet extends HttpServlet {
             sendErrorsToView(req, resp, errors);
         }
         if (loginContext != null) {
-            Set<Object> privateCredentials = loginContext.getSubject().getPrivateCredentials();
-            if (!privateCredentials.isEmpty()) {
-                User user = (User) privateCredentials.iterator().next();
-                logger.debug(user);
-                HttpSession session = req.getSession();
-                session.setAttribute("user", user);
-                resp.sendRedirect(req.getContextPath() + "/main");
-            }
+            HttpSession session = req.getSession();
+            session.setAttribute("loginContext", loginContext);
+            resp.sendRedirect(req.getContextPath() + "/main");
         }
         //TODO послать редирект на страницу с общей ошибкой "что-то пошло не так"
     }
+
 
     private void sendErrorsToView(HttpServletRequest req, HttpServletResponse resp, List<String> errors) throws ServletException, IOException {
         req.setAttribute("errors", errors);

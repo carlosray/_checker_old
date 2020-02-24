@@ -88,25 +88,12 @@ public class RealDbTest {
                     System.out.println(allUsers);
                 }
 
-                if (command.equals("createNotif")) {
-                    NotificationDao dao = DaoFactory.getNotificationDao(connection);
-                    UserDao userDao = DaoFactory.getUserDao(connection);
-                    User user = userDao.getUser("testuser");
-                    Notification notification = new Notification("email", "testAddress", user);
-                    Notification createdNotification = dao.createNotification(notification);
-                    System.out.println(createdNotification);
-                }
-
                 if (command.equals("getNotifByAddress")) {
                     NotificationDao dao = DaoFactory.getNotificationDao(connection);
                     List<Notification> testAddress = dao.getNotificationsByAddress("testAddress");
                     System.out.println(testAddress);
                 }
 
-                if (command.equals("getAllTypes")) {
-                    NotificationDao dao = DaoFactory.getNotificationDao(connection);
-                    System.out.println(dao.getAllNotificationTypes());
-                }
 
                 if (command.equals("passUtils")) {
                     UserDao dao = DaoFactory.getUserDao(connection);

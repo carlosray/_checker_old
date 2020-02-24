@@ -22,6 +22,15 @@
                 <configuration>
                     <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
                     <warName>checker</warName>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/resources</directory>
+                            <targetPath>META-INF</targetPath>
+                            <includes>
+                                <include>context.xml</include>
+                            </includes>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
             <plugin>
